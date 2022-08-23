@@ -1,0 +1,86 @@
+{% extends 'hospital/admin_base.html' %}
+{% block content %}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+  </style>
+</head>
+
+<div class="container">
+  <br />
+  <br />
+  <br />
+  <br />
+  <form class="d-flex" method=GET action="{% url 'admin-view-appointment' %}">
+    {% csrf_token %}
+
+    <input class="form-control me-2" type="search" placeholder="Search by doctor" aria-label="Search" name='q'>
+    <button class="btn btn-outline-secondary" type="submit" style="background-color: lightcoral">Search</button>
+    <button class="btn btn-primary" type="submit" style="float:right">Back</button>
+  </form>
+  <br>
+  <form class="d-flex" method=GET action="{% url 'admin-view-appointment-pt' %}">
+
+    {% csrf_token %}
+
+
+    <input class="form-control me-2" type="search" placeholder="Search by patient" aria-label="Search" name='q'>
+    <button class="btn btn-outline-secondary" type="submit" style="background-color: lightcoral">Search</button>
+    <form class="d-flex" method=GET action="{% url 'admin-view-appointment' %}">
+      {% csrf_token %}
+      <button class="btn btn-primary" type="submit" style="float:right">Back</button>
+    </form>
+  </form>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Appointments</h6>
+    </div>
+    <table class="table table-hover" id="dev-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Doctor Name(ID)</th>
+          <th>Patient Name(ID)</th>
+          <th>Description</th>
+          <th>Prescription</th>
+          <th>Date</th>
+          <th>pre_stat</th>
+        </tr>
+      </thead>
+      {% for a in appointments %}
+      <tr>
+        <td> {{a.id}}</td>
+        <td> {{a.doctorName}}({{a.doctorId}})</td>
+        <td>{{a.patientName}}({{a.patientId}})</td>
+        <td>{{a.description}}</td>
+        <td>{{a.prescription}}</td>
+        <td>{{a.appointmentDate}}</td>
+        {%if a.pre_stat%}
+        <td> <span class="label label-primary">Confirmed</span></td>
+        {% else %}
+        <td> <span class="label label-success">Pending</span></td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+
+{% endblock content %}
